@@ -1,30 +1,58 @@
 import axios from "axios";
 
-const API_BASE_URL = 'http://localhost:30001';
-
-const api = axios.create({
-    baseURL:'http://localhost:3001/', // URL base para las peticiones
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  });
 
 export const loginUser = async (data: { username: string; password: string }) => {
-    try {
-        const response = await axios.post('/auth/login', data);
-        console.log('Login exitoso', response); // Imprime el token en consola
-        // localStorage.setItem('token', response); // Almacena el token
-        return response.data;
-    } catch (error) {
-        console.error('Error iniciando sesión', error);
-    }
-    
-  };
+  try {
+    const response = await axios.post('http://localhost:3001/auth/login', data);
+    localStorage.setItem('token', response.data.accessToken); 
+    return response.data;
+  } catch (error) {
+    console.error('Error iniciando sesión', error);
+  }
+
+};
+
+export const registerUser = async (data: { username: string; password: string }) => {
+  try {
+    const response = await axios.post('http://localhost:3001/auth/register', data);
+    return response.data;
+  } catch (error) {
+    console.error('Error iniciando sesión', error);
+  }
+
+};
+
+export const createTask = async (data: { title: string, description: string, status: string, dueDate: string }) => {
+  const token = localStorage.getItem('token');
+  try {
+    await axios.post('http://localhost:3001/tasks',data,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+  } catch (error) {
+    console.error('Error al crear la tarea', error);
+  }
+};
+
+export const editTask = async (data: { id: string, title: string, description: string, status: string, dueDate: string }) => {
+  const token = localStorage.getItem('token');
+  console.log(data.id);
+  try {
+    await axios.put(`http://localhost:3001/tasks/${data.id}`,data,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+  } catch (error) {
+    console.error('Error al editar la tarea', error);
+  }
+};
+
+export const deleteTask = async (data: { id: number}) => {
+  const token = localStorage.getItem('token');
+  console.log(data.id);
+  try {
+    await axios.delete(`http://localhost:3001/tasks/${data.id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+  });
+  } catch (error) {
+    console.error('Error al editar la tarea', error);
+  }
+};

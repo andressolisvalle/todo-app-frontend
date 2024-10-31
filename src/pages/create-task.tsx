@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { createTask } from '@/services/apiservice';
 
 
 interface ModalProps {
@@ -17,8 +18,9 @@ const CreateTask: React.FC<ModalProps> = ({isOpen, onClose}) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const token = localStorage.getItem('token');
-        await axios.post('http://localhost:3001/tasks', { title, description, status, dueDate }, { headers: { Authorization: `Bearer ${token}` } });
+        await createTask({ title, description, status, dueDate });
+        // const token = localStorage.getItem('token');
+        // await axios.post('http://localhost:3001/tasks', { title, description, status, dueDate }, { headers: { Authorization: `Bearer ${token}` } });
         router.push('/tasks'); 
         onClose();
     };
@@ -70,6 +72,7 @@ const CreateTask: React.FC<ModalProps> = ({isOpen, onClose}) => {
                 value={status} 
                 onChange={(e) => setStatus(e.target.value)} 
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                required
               >
                 <option value="">Seleccione Estado</option>
                 <option value="pendiente">Pendiente</option>

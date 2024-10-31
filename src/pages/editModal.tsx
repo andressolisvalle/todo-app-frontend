@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { editTask } from '@/services/apiservice';
 
 interface ModalProps {
   isOpen: boolean;
@@ -40,11 +41,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, task }) => {
     const token = localStorage.getItem('token');
 
     try {
-      await axios.put(`http://localhost:3001/tasks/${id}`, 
-        { title, description, status, dueDate }, 
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      
+      await editTask({id, title, description, status, dueDate });
       router.push('/tasks');
       onClose();
     } catch (error) {

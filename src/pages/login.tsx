@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import "../app/globals.css";
+import { loginUser } from '@/services/apiservice';
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -10,10 +11,8 @@ const Login = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const { data } = await axios.post('http://localhost:3001/auth/login', { username, password });
-            console.log('Login exitoso', data.accessToken); // Imprime el token en consola
-            localStorage.setItem('token', data.accessToken); // Almacena el token
-            router.push('/tasks'); // Redirige a la página de tareas
+            await loginUser({ username, password });
+            router.push('/tasks'); 
         } catch (error) {
             console.error('Error iniciando sesión', error);
         }
@@ -62,26 +61,7 @@ const Login = () => {
                                     required
                                 />
                             </div>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-start">
-                                    <div className="flex items-center h-5">
-                                        <input
-                                            id="remember"
-                                            aria-describedby="remember"
-                                            type="checkbox"
-                                            className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                                        />
-                                    </div>
-                                    <div className="ml-3 text-sm">
-                                        <label htmlFor="remember" className="text-gray-500 dark:text-gray-300">
-                                            Remember me
-                                        </label>
-                                    </div>
-                                </div>
-                                <a href="#" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">
-                                    Forgot password?
-                                </a>
-                            </div>
+                           
                             <button
                                 type="submit"
                                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
