@@ -30,8 +30,10 @@ export const loginUser = async (data: { username: string; password: string }) =>
 export const registerUser = async (data: { username: string; password: string }) => {
   try {
     const response = await axios.post(`${API_ROUTE}/auth/register`, data);
+    if(response.data == "El usuario ya existe") window.alert('El usuario ya existe');
     return response.data;
   } catch (error) {
+    window.alert(''+error);
     console.error('Error iniciando sesión', error);
   }
 
