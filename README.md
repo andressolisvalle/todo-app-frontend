@@ -1,7 +1,7 @@
 <h1 align="center">TODO APP FRONTEND </h1>
 
 **Instrucciones de Configuración**
-1. Al moneto de clonar le repositorio ejecutar el comando npm install la cual va a permitir la instalacion de las dependencias del proyecto..
+1. Al mometo de clonar le repositorio ejecutar el comando npm install la cual va a permitir la instalacion de las dependencias del proyecto..
 
 **Explicación Técnica**
 - Next.js permite crear un frontend reactivo con una estructura de carpetas para organizar componentes y páginas. TypeScript añade tipado estático, ayudando a evitar errores comunes y mejorar la productividad.
