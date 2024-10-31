@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import "../app/globals.css";
 import { loginUser } from '@/services/apiservice';

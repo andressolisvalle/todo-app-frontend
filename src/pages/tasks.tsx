@@ -4,7 +4,7 @@ import withAuth from '../utils/withAuth';
 import "../app/globals.css";
 import Modal from './editModal';
 import CreateTask from './create-task';
-import { deleteTask } from '@/services/apiservice';
+import { deleteTask, getTask } from '@/services/apiservice';
 
 interface Task {
     id: number;
@@ -19,20 +19,18 @@ const Tasks = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [createMod, setCreateMod] = useState(false);
     const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-    const [statusFilter, setStatusFilter] = useState<string>(''); // Nuevo estado para el filtro
+    const [statusFilter, setStatusFilter] = useState<string>(''); 
+
+    const fetchTasks = async () => {
+        try {
+            const data = await getTask();
+            setTasks(data);
+        } catch (error) {
+            console.error('Error fetching tasks', error);
+        }
+    };
 
     useEffect(() => {
-        const fetchTasks = async () => {
-            const token = localStorage.getItem('token');
-            try {
-                const { data } = await axios.get('http://localhost:3001/tasks', {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                setTasks(data);
-            } catch (error) {
-                console.error('Error fetching tasks', error);
-            }
-        };
         fetchTasks();
     }, []);
 
@@ -147,12 +145,12 @@ const Tasks = () => {
 
                 {/* Modal editar */}
                 {isModalOpen && (
-                    <Modal isOpen={isModalOpen} onClose={closeModal} task={selectedTask} />
+                    <Modal isOpen={isModalOpen} onClose={closeModal} task={selectedTask} onTaskCreated={fetchTasks}/>
                 )}
 
                 {/* Modal para crear tarea */}
                 {createMod && (
-                    <CreateTask isOpen={createMod} onClose={closeCreateTask} />
+                <CreateTask isOpen={createMod} onClose={closeCreateTask} onTaskCreated={fetchTasks} />
                 )}
             </div>
         </div>

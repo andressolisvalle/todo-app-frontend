@@ -7,8 +7,9 @@ import { createTask } from '@/services/apiservice';
 interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
+    onTaskCreated: () => void;
 }
-const CreateTask: React.FC<ModalProps> = ({isOpen, onClose}) => {
+const CreateTask: React.FC<ModalProps> = ({isOpen, onClose, onTaskCreated }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [status, setStatus] = useState('');
@@ -19,9 +20,7 @@ const CreateTask: React.FC<ModalProps> = ({isOpen, onClose}) => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         await createTask({ title, description, status, dueDate });
-        // const token = localStorage.getItem('token');
-        // await axios.post('http://localhost:3001/tasks', { title, description, status, dueDate }, { headers: { Authorization: `Bearer ${token}` } });
-        router.push('/tasks'); 
+        onTaskCreated(); 
         onClose();
     };
 

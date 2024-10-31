@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import { editTask } from '@/services/apiservice';
 
@@ -13,9 +12,10 @@ interface ModalProps {
     status: string;
     dueDate: string;
   } | null; 
+  onTaskCreated: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, task }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, task , onTaskCreated}) => {
   const router = useRouter();
   
   const [id, setId] = useState("")
@@ -38,11 +38,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, task }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
-
     try {
       await editTask({id, title, description, status, dueDate });
-      router.push('/tasks');
+      onTaskCreated(); 
       onClose();
     } catch (error) {
       console.error('Error al actualizar la tarea', error);
